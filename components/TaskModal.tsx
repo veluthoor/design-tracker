@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Task, TaskStatus, TaskType, TaskTag } from "@/types/task";
 
 interface TaskModalProps {
@@ -14,12 +14,139 @@ const STATUSES: TaskStatus[] = ["Not started", "In progress", "In review", "Hand
 const TASK_TYPES: TaskType[] = ["⭐️ Feature", "📈 Improvement", "🔧 Fix"];
 const TAGS: TaskTag[] = ["Tintin", "Nexus", "Halo"];
 
-const STATUS_COLORS: Record<string, string> = {
-  "Not started": "bg-gray-100 text-gray-600",
-  "In progress": "bg-blue-100 text-blue-700",
-  "In review": "bg-yellow-100 text-yellow-700",
-  "Handed-over": "bg-green-100 text-green-700",
-};
+// Parse comma-separated string to array
+function toArray(val: string | undefined): string[] {
+  if (!val) return [];
+  return val.split(",").map(s => s.trim()).filter(Boolean);
+}
+
+// Join array to comma-separated string
+function toString(arr: string[]): string {
+  return arr.join(", ");
+}
+
+interface MemberSelectProps {
+  label: string;
+  selected: string[];
+  members: string[];
+  onChange: (val: string[]) => void;
+  onAddMember: (name: string) => Promise<void>;
+}
+
+function MemberSelect({ label, selected, members, onChange, onAddMember }: MemberSelectProps) {
+  const [open, setOpen] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [saving, setSaving] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const toggle = (name: string) => {
+    if (selected.includes(name)) {
+      onChange(selected.filter(s => s !== name));
+    } else {
+      onChange([...selected, name]);
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!newName.trim()) return;
+    setSaving(true);
+    try {
+      await onAddMember(newName.trim());
+      onChange([...selected, newName.trim()]);
+      setNewName("");
+      setAdding(false);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <label className="block text-xs font-medium text-gray-500 mb-1">{label}</label>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-left focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white min-h-[38px] flex flex-wrap gap-1 items-center"
+      >
+        {selected.length === 0 ? (
+          <span className="text-gray-400">Select...</span>
+        ) : (
+          selected.map(name => (
+            <span
+              key={name}
+              className="inline-flex items-center gap-1 bg-indigo-100 text-indigo-700 text-xs font-medium px-2 py-0.5 rounded-full"
+            >
+              {name}
+              <span
+                role="button"
+                onClick={e => { e.stopPropagation(); toggle(name); }}
+                className="hover:text-indigo-900 cursor-pointer leading-none"
+              >×</span>
+            </span>
+          ))
+        )}
+        <span className="ml-auto text-gray-400 text-xs">{open ? "▲" : "▼"}</span>
+      </button>
+
+      {open && (
+        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 overflow-y-auto">
+          {members.map(name => (
+            <div
+              key={name}
+              onClick={() => toggle(name)}
+              className="flex items-center gap-2 px-3 py-2 hover:bg-indigo-50 cursor-pointer text-sm"
+            >
+              <span className={`w-4 h-4 rounded border flex items-center justify-center text-xs flex-shrink-0 ${selected.includes(name) ? "bg-indigo-600 border-indigo-600 text-white" : "border-gray-300"}`}>
+                {selected.includes(name) ? "✓" : ""}
+              </span>
+              {name}
+            </div>
+          ))}
+
+          {/* Add new member */}
+          {adding ? (
+            <div className="flex items-center gap-2 px-3 py-2 border-t border-gray-100">
+              <input
+                autoFocus
+                className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                placeholder="Full name..."
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter") handleAdd(); if (e.key === "Escape") setAdding(false); }}
+              />
+              <button
+                type="button"
+                onClick={handleAdd}
+                disabled={saving || !newName.trim()}
+                className="text-xs bg-indigo-600 text-white px-2 py-1 rounded disabled:opacity-50"
+              >
+                {saving ? "..." : "Add"}
+              </button>
+              <button type="button" onClick={() => setAdding(false)} className="text-xs text-gray-400 hover:text-gray-600">✕</button>
+            </div>
+          ) : (
+            <div
+              onClick={() => setAdding(true)}
+              className="flex items-center gap-2 px-3 py-2 border-t border-gray-100 hover:bg-gray-50 cursor-pointer text-sm text-indigo-600 font-medium"
+            >
+              <span className="text-base leading-none">+</span> Add new member
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModalProps) {
   const [form, setForm] = useState<Partial<Task>>({
@@ -34,14 +161,29 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
     receivedBy: "",
     tags: "Tintin",
   });
+  const [members, setMembers] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (task) {
-      setForm({ ...task });
-    }
+    if (task) setForm({ ...task });
+    // Fetch members
+    fetch("/api/members")
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setMembers(data); })
+      .catch(() => {});
   }, [task]);
+
+  const handleAddMember = async (name: string) => {
+    const res = await fetch("/api/members", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    });
+    if (res.ok || res.status === 409) {
+      setMembers(prev => prev.includes(name) ? prev : [...prev, name].sort());
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,17 +270,8 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
             </div>
           </div>
 
-          {/* Row: Assignee + Task Type */}
+          {/* Row: Task Type */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Assignee</label>
-              <input
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                value={form.assignee || ""}
-                onChange={e => setForm(f => ({ ...f, assignee: e.target.value }))}
-                placeholder="e.g. Kunal Verma"
-              />
-            </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Task Type</label>
               <select
@@ -149,10 +282,6 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
                 {TASK_TYPES.map(t => <option key={t}>{t}</option>)}
               </select>
             </div>
-          </div>
-
-          {/* Row: Delivery + Received By */}
-          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Delivery Date</label>
               <input
@@ -162,16 +291,25 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
                 onChange={e => setForm(f => ({ ...f, delivery: e.target.value }))}
               />
             </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Received By</label>
-              <input
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                value={form.receivedBy || ""}
-                onChange={e => setForm(f => ({ ...f, receivedBy: e.target.value }))}
-                placeholder="e.g. Puneeth K"
-              />
-            </div>
           </div>
+
+          {/* Assignee — multi-select */}
+          <MemberSelect
+            label="Assignee"
+            selected={toArray(form.assignee)}
+            members={members}
+            onChange={val => setForm(f => ({ ...f, assignee: toString(val) }))}
+            onAddMember={handleAddMember}
+          />
+
+          {/* Received By — multi-select */}
+          <MemberSelect
+            label="Received By"
+            selected={toArray(form.receivedBy)}
+            members={members}
+            onChange={val => setForm(f => ({ ...f, receivedBy: toString(val) }))}
+            onAddMember={handleAddMember}
+          />
 
           {/* Figma Link */}
           <div>
