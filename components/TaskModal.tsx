@@ -340,7 +340,7 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
                 type="button"
                 onClick={handleDelete}
                 disabled={deleting}
-                className="text-rose-400 text-sm hover:text-rose-600 disabled:opacity-50"
+                className="text-rose-600 text-sm hover:text-rose-800 disabled:opacity-50"
               >
                 {deleting ? "Deleting..." : "Delete task"}
               </button>
@@ -349,14 +349,14 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-pink-400 hover:text-pink-600"
+                className="px-4 py-2 text-sm text-rose-600 hover:text-rose-800"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="px-4 py-2 text-sm bg-gradient-to-r from-pink-500 to-rose-400 hover:from-pink-600 hover:to-rose-500 text-white rounded-full disabled:opacity-50 shadow-sm"
+                className="px-4 py-2 text-sm bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white rounded-full disabled:opacity-50 shadow-sm"
               >
                 {saving ? "Saving..." : isEdit ? "Save changes" : "Create task"}
               </button>

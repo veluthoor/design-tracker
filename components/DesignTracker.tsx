@@ -5,22 +5,22 @@ import { Task } from "@/types/task";
 import TaskModal from "./TaskModal";
 
 const STATUS_STYLES: Record<string, string> = {
-  "Not started": "bg-pink-50 text-pink-400 border border-pink-200",
-  "In progress": "bg-fuchsia-100 text-fuchsia-600",
-  "In review": "bg-rose-100 text-rose-500",
-  "Handed-over": "bg-pink-200 text-pink-700",
+  "Not started": "bg-pink-100 text-rose-700",
+  "In progress": "bg-fuchsia-100 text-fuchsia-800",
+  "In review": "bg-rose-100 text-rose-700",
+  "Handed-over": "bg-pink-200 text-pink-800",
 };
 
 const TAG_STYLES: Record<string, string> = {
-  Tintin: "bg-purple-100 text-purple-600",
-  Nexus: "bg-fuchsia-100 text-fuchsia-600",
-  Halo: "bg-rose-100 text-rose-500",
+  Tintin: "bg-purple-100 text-purple-700",
+  Nexus: "bg-fuchsia-100 text-fuchsia-800",
+  Halo: "bg-rose-100 text-rose-700",
 };
 
 const TYPE_STYLES: Record<string, string> = {
-  "⭐️ Feature": "bg-pink-100 text-pink-600",
-  "📈 Improvement": "bg-purple-100 text-purple-600",
-  "🔧 Fix": "bg-rose-100 text-rose-500",
+  "⭐️ Feature": "bg-pink-100 text-pink-800",
+  "📈 Improvement": "bg-purple-100 text-purple-700",
+  "🔧 Fix": "bg-rose-100 text-rose-700",
 };
 
 function Badge({ label, styleMap }: { label: string; styleMap: Record<string, string> }) {
@@ -120,7 +120,7 @@ export default function DesignTracker() {
   };
 
   const SortIcon = ({ field }: { field: keyof Task }) => (
-    <span className={`ml-1 text-xs ${sortField === field ? "text-pink-500" : "text-pink-200"}`}>
+    <span className={`ml-1 text-xs ${sortField === field ? "text-rose-600" : "text-rose-300"}`}>
       {sortField === field ? (sortDir === "asc" ? "↑" : "↓") : "↕"}
     </span>
   );
@@ -134,15 +134,15 @@ export default function DesignTracker() {
       {/* Top bar */}
       <header className="bg-white border-b border-pink-100 px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-rose-400 rounded-lg flex items-center justify-center shadow-sm">
+          <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-lg flex items-center justify-center shadow-sm">
             <span className="text-white text-sm font-bold">✦</span>
           </div>
-          <h1 className="text-lg font-semibold text-rose-700">Design Tracker</h1>
-          <span className="text-pink-300 text-sm">{filtered.length} tasks</span>
+          <h1 className="text-lg font-semibold text-rose-800">Design Tracker</h1>
+          <span className="text-rose-400 text-sm">{filtered.length} tasks</span>
         </div>
         <button
           onClick={openNew}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-pink-500 to-rose-400 hover:from-pink-600 hover:to-rose-500 text-white text-sm font-medium px-4 py-2 rounded-full transition-all shadow-sm"
+          className="flex items-center gap-1.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white text-sm font-medium px-4 py-2 rounded-full transition-all shadow-sm"
         >
           <span className="text-base leading-none">+</span> New task
         </button>
@@ -163,13 +163,13 @@ export default function DesignTracker() {
 
         {/* Status filter */}
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-pink-400 font-medium">Status:</span>
+          <span className="text-xs text-rose-600 font-medium">Status:</span>
           <div className="flex gap-1">
             {statuses.map(s => (
               <button
                 key={s}
                 onClick={() => setFilterStatus(s)}
-                className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${filterStatus === s ? "bg-pink-500 text-white" : "text-pink-400 hover:bg-pink-100"}`}
+                className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${filterStatus === s ? "bg-rose-600 text-white" : "text-rose-600 hover:bg-pink-100"}`}
               >{s}</button>
             ))}
           </div>
@@ -177,13 +177,13 @@ export default function DesignTracker() {
 
         {/* Tag filter */}
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-pink-400 font-medium">Tag:</span>
+          <span className="text-xs text-rose-600 font-medium">Tag:</span>
           <div className="flex gap-1">
             {tags.map(t => (
               <button
                 key={t}
                 onClick={() => setFilterTag(t)}
-                className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${filterTag === t ? "bg-pink-500 text-white" : "text-pink-400 hover:bg-pink-100"}`}
+                className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${filterTag === t ? "bg-rose-600 text-white" : "text-rose-600 hover:bg-pink-100"}`}
               >{t}</button>
             ))}
           </div>
@@ -191,13 +191,13 @@ export default function DesignTracker() {
 
         {/* Type filter */}
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-pink-400 font-medium">Type:</span>
+          <span className="text-xs text-rose-600 font-medium">Type:</span>
           <div className="flex gap-1">
             {types.map(t => (
               <button
                 key={t}
                 onClick={() => setFilterType(t)}
-                className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${filterType === t ? "bg-pink-500 text-white" : "text-pink-400 hover:bg-pink-100"}`}
+                className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${filterType === t ? "bg-rose-600 text-white" : "text-rose-600 hover:bg-pink-100"}`}
               >{t}</button>
             ))}
           </div>
@@ -211,31 +211,31 @@ export default function DesignTracker() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gradient-to-r from-pink-50 to-rose-50 border-b border-pink-100">
-                  <th className="text-left px-4 py-3 font-medium text-pink-300 w-8">
+                  <th className="text-left px-4 py-3 font-medium text-rose-300 w-8">
                     <span className="text-xs">#</span>
                   </th>
                   <th
-                    className="text-left px-4 py-3 font-medium text-pink-400 cursor-pointer hover:text-rose-500 min-w-[200px]"
+                    className="text-left px-4 py-3 font-medium text-rose-600 cursor-pointer hover:text-rose-800 min-w-[200px]"
                     onClick={() => handleSort("taskName")}
                   >Task <SortIcon field="taskName" /></th>
-                  <th className="text-left px-4 py-3 font-medium text-pink-400 min-w-[80px]">Tag</th>
+                  <th className="text-left px-4 py-3 font-medium text-rose-600 min-w-[80px]">Tag</th>
                   <th
-                    className="text-left px-4 py-3 font-medium text-pink-400 cursor-pointer hover:text-rose-500 min-w-[110px]"
+                    className="text-left px-4 py-3 font-medium text-rose-600 cursor-pointer hover:text-rose-800 min-w-[110px]"
                     onClick={() => handleSort("status")}
                   >Status <SortIcon field="status" /></th>
-                  <th className="text-left px-4 py-3 font-medium text-pink-400 min-w-[90px]">Type</th>
+                  <th className="text-left px-4 py-3 font-medium text-rose-600 min-w-[90px]">Type</th>
                   <th
-                    className="text-left px-4 py-3 font-medium text-pink-400 cursor-pointer hover:text-rose-500 min-w-[110px]"
+                    className="text-left px-4 py-3 font-medium text-rose-600 cursor-pointer hover:text-rose-800 min-w-[110px]"
                     onClick={() => handleSort("assignee")}
                   >Assignee <SortIcon field="assignee" /></th>
                   <th
-                    className="text-left px-4 py-3 font-medium text-pink-400 cursor-pointer hover:text-rose-500 min-w-[105px]"
+                    className="text-left px-4 py-3 font-medium text-rose-600 cursor-pointer hover:text-rose-800 min-w-[105px]"
                     onClick={() => handleSort("delivery")}
                   >Delivery <SortIcon field="delivery" /></th>
-                  <th className="text-left px-4 py-3 font-medium text-pink-400 min-w-[110px]">Received By</th>
-                  <th className="text-left px-4 py-3 font-medium text-pink-400 min-w-[100px]">Links</th>
+                  <th className="text-left px-4 py-3 font-medium text-rose-600 min-w-[110px]">Received By</th>
+                  <th className="text-left px-4 py-3 font-medium text-rose-600 min-w-[100px]">Links</th>
                   <th
-                    className="text-left px-4 py-3 font-medium text-pink-400 cursor-pointer hover:text-rose-500 min-w-[105px]"
+                    className="text-left px-4 py-3 font-medium text-rose-600 cursor-pointer hover:text-rose-800 min-w-[105px]"
                     onClick={() => handleSort("updatedAt")}
                   >Updated <SortIcon field="updatedAt" /></th>
                 </tr>
@@ -243,16 +243,16 @@ export default function DesignTracker() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={10} className="px-4 py-12 text-center text-pink-300">
+                    <td colSpan={10} className="px-4 py-12 text-center text-rose-500">
                       <div className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-4 border-2 border-pink-400 border-t-transparent rounded-full animate-spin" />
+                        <div className="w-4 h-4 border-2 border-rose-400 border-t-transparent rounded-full animate-spin" />
                         Loading...
                       </div>
                     </td>
                   </tr>
                 ) : filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="px-4 py-12 text-center text-pink-300">
+                    <td colSpan={10} className="px-4 py-12 text-center text-rose-500">
                       No tasks found
                     </td>
                   </tr>
@@ -262,13 +262,13 @@ export default function DesignTracker() {
                     onClick={() => openEdit(task)}
                     className="border-b border-pink-50 hover:bg-pink-50/70 cursor-pointer transition-colors group"
                   >
-                    <td className="px-4 py-3 text-pink-200 text-xs">{i + 1}</td>
+                    <td className="px-4 py-3 text-rose-300 text-xs">{i + 1}</td>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-rose-800 group-hover:text-pink-600 transition-colors">
+                      <div className="font-medium text-rose-800 group-hover:text-rose-600 transition-colors">
                         {task.taskName}
                       </div>
                       {task.description && (
-                        <div className="text-pink-300 text-xs mt-0.5 line-clamp-1">{task.description}</div>
+                        <div className="text-rose-500 text-xs mt-0.5 line-clamp-1">{task.description}</div>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -287,17 +287,17 @@ export default function DesignTracker() {
                       <div className="flex gap-2">
                         {task.attachFile && (
                           <a href={task.attachFile} target="_blank" rel="noopener noreferrer"
-                            className="text-pink-500 hover:text-pink-700 text-xs font-medium hover:underline"
+                            className="text-pink-700 hover:text-pink-900 text-xs font-medium hover:underline"
                             title="Figma">Figma</a>
                         )}
                         {task.productDoc && (
                           <a href={task.productDoc} target="_blank" rel="noopener noreferrer"
-                            className="text-fuchsia-500 hover:text-fuchsia-700 text-xs font-medium hover:underline"
+                            className="text-fuchsia-700 hover:text-fuchsia-900 text-xs font-medium hover:underline"
                             title="Product Doc">Doc</a>
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-pink-300 text-xs whitespace-nowrap">{formatDate(task.updatedAt)}</td>
+                    <td className="px-4 py-3 text-rose-400 text-xs whitespace-nowrap">{formatDate(task.updatedAt)}</td>
                   </tr>
                 ))}
               </tbody>
