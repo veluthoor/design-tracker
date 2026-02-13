@@ -72,19 +72,19 @@ function MemberSelect({ label, selected, members, onChange, onAddMember }: Membe
 
   return (
     <div ref={ref} className="relative">
-      <label className="block text-xs font-medium text-gray-500 mb-1">{label}</label>
+      <label className="block text-xs font-medium text-pink-400 mb-1">{label}</label>
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
-        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-left focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white min-h-[38px] flex flex-wrap gap-1 items-center"
+        className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm text-left focus:outline-none focus:ring-2 focus:ring-pink-300 bg-pink-50/50 min-h-[38px] flex flex-wrap gap-1 items-center"
       >
         {selected.length === 0 ? (
-          <span className="text-gray-400">Select...</span>
+          <span className="text-pink-300">Select...</span>
         ) : (
           selected.map(name => (
             <span
               key={name}
-              className="inline-flex items-center gap-1 bg-indigo-100 text-indigo-700 text-xs font-medium px-2 py-0.5 rounded-full"
+              className="inline-flex items-center gap-1 bg-pink-100 text-pink-600 text-xs font-medium px-2 py-0.5 rounded-full"
             >
               {name}
               <span
@@ -99,26 +99,26 @@ function MemberSelect({ label, selected, members, onChange, onAddMember }: Membe
       </button>
 
       {open && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 overflow-y-auto">
+        <div className="absolute z-50 w-full mt-1 bg-white border border-pink-100 rounded-xl shadow-lg max-h-52 overflow-y-auto">
           {members.map(name => (
             <div
               key={name}
               onClick={() => toggle(name)}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-indigo-50 cursor-pointer text-sm"
+              className="flex items-center gap-2 px-3 py-2 hover:bg-pink-50 cursor-pointer text-sm"
             >
-              <span className={`w-4 h-4 rounded border flex items-center justify-center text-xs flex-shrink-0 ${selected.includes(name) ? "bg-indigo-600 border-indigo-600 text-white" : "border-gray-300"}`}>
+              <span className={`w-4 h-4 rounded border flex items-center justify-center text-xs flex-shrink-0 ${selected.includes(name) ? "bg-pink-500 border-pink-500 text-white" : "border-pink-200"}`}>
                 {selected.includes(name) ? "✓" : ""}
               </span>
-              {name}
+              <span className="text-rose-700">{name}</span>
             </div>
           ))}
 
           {/* Add new member */}
           {adding ? (
-            <div className="flex items-center gap-2 px-3 py-2 border-t border-gray-100">
+            <div className="flex items-center gap-2 px-3 py-2 border-t border-pink-100">
               <input
                 autoFocus
-                className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                className="flex-1 border border-pink-200 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-pink-300 bg-pink-50/50 placeholder-pink-300"
                 placeholder="Full name..."
                 value={newName}
                 onChange={e => setNewName(e.target.value)}
@@ -128,16 +128,16 @@ function MemberSelect({ label, selected, members, onChange, onAddMember }: Membe
                 type="button"
                 onClick={handleAdd}
                 disabled={saving || !newName.trim()}
-                className="text-xs bg-indigo-600 text-white px-2 py-1 rounded disabled:opacity-50"
+                className="text-xs bg-pink-500 text-white px-2 py-1 rounded-lg disabled:opacity-50"
               >
                 {saving ? "..." : "Add"}
               </button>
-              <button type="button" onClick={() => setAdding(false)} className="text-xs text-gray-400 hover:text-gray-600">✕</button>
+              <button type="button" onClick={() => setAdding(false)} className="text-xs text-pink-300 hover:text-pink-500">✕</button>
             </div>
           ) : (
             <div
               onClick={() => setAdding(true)}
-              className="flex items-center gap-2 px-3 py-2 border-t border-gray-100 hover:bg-gray-50 cursor-pointer text-sm text-indigo-600 font-medium"
+              className="flex items-center gap-2 px-3 py-2 border-t border-pink-100 hover:bg-pink-50 cursor-pointer text-sm text-pink-500 font-medium"
             >
               <span className="text-base leading-none">+</span> Add new member
             </div>
@@ -211,23 +211,23 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
   const isEdit = !!task?._id;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-rose-950/30 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-pink-100">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-pink-100 bg-gradient-to-r from-pink-50 to-rose-50 rounded-t-2xl">
+          <h2 className="text-lg font-semibold text-rose-700">
             {isEdit ? "Edit Task" : "New Task"}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+          <button onClick={onClose} className="text-pink-300 hover:text-pink-500 text-xl leading-none">✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
           {/* Task Name */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Task Name *</label>
+            <label className="block text-xs font-medium text-pink-400 mb-1">Task Name *</label>
             <input
               required
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-pink-50/50 placeholder-pink-300"
               value={form.taskName || ""}
               onChange={e => setForm(f => ({ ...f, taskName: e.target.value }))}
               placeholder="e.g. Home Screen Re-work"
@@ -236,10 +236,10 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Description</label>
+            <label className="block text-xs font-medium text-pink-400 mb-1">Description</label>
             <textarea
               rows={2}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+              className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 resize-none bg-pink-50/50 placeholder-pink-300"
               value={form.description || ""}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               placeholder="What is this task about?"
@@ -249,9 +249,9 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
           {/* Row: Status + Tags */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
+              <label className="block text-xs font-medium text-pink-400 mb-1">Status</label>
               <select
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+                className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white"
                 value={form.status || "Not started"}
                 onChange={e => setForm(f => ({ ...f, status: e.target.value as TaskStatus }))}
               >
@@ -259,9 +259,9 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Tags</label>
+              <label className="block text-xs font-medium text-pink-400 mb-1">Tags</label>
               <select
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+                className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white"
                 value={form.tags || "Tintin"}
                 onChange={e => setForm(f => ({ ...f, tags: e.target.value as TaskTag }))}
               >
@@ -273,9 +273,9 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
           {/* Row: Task Type */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Task Type</label>
+              <label className="block text-xs font-medium text-pink-400 mb-1">Task Type</label>
               <select
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+                className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white"
                 value={form.taskType || "⭐️ Feature"}
                 onChange={e => setForm(f => ({ ...f, taskType: e.target.value as TaskType }))}
               >
@@ -283,10 +283,10 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Delivery Date</label>
+              <label className="block text-xs font-medium text-pink-400 mb-1">Delivery Date</label>
               <input
                 type="date"
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-pink-50/50"
                 value={form.delivery ? new Date(form.delivery).toISOString().split("T")[0] : ""}
                 onChange={e => setForm(f => ({ ...f, delivery: e.target.value }))}
               />
@@ -313,9 +313,9 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
 
           {/* Figma Link */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Figma Link</label>
+            <label className="block text-xs font-medium text-pink-400 mb-1">Figma Link</label>
             <input
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-pink-50/50 placeholder-pink-300"
               value={form.attachFile || ""}
               onChange={e => setForm(f => ({ ...f, attachFile: e.target.value }))}
               placeholder="https://www.figma.com/..."
@@ -324,9 +324,9 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
 
           {/* Product Doc */}
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Product Doc</label>
+            <label className="block text-xs font-medium text-pink-400 mb-1">Product Doc</label>
             <input
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-pink-50/50 placeholder-pink-300"
               value={form.productDoc || ""}
               onChange={e => setForm(f => ({ ...f, productDoc: e.target.value }))}
               placeholder="https://..."
@@ -334,13 +334,13 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+          <div className="flex items-center justify-between pt-2 border-t border-pink-100">
             {isEdit && onDelete ? (
               <button
                 type="button"
                 onClick={handleDelete}
                 disabled={deleting}
-                className="text-red-500 text-sm hover:text-red-700 disabled:opacity-50"
+                className="text-rose-400 text-sm hover:text-rose-600 disabled:opacity-50"
               >
                 {deleting ? "Deleting..." : "Delete task"}
               </button>
@@ -349,14 +349,14 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+                className="px-4 py-2 text-sm text-pink-400 hover:text-pink-600"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                className="px-4 py-2 text-sm bg-gradient-to-r from-pink-500 to-rose-400 hover:from-pink-600 hover:to-rose-500 text-white rounded-full disabled:opacity-50 shadow-sm"
               >
                 {saving ? "Saving..." : isEdit ? "Save changes" : "Create task"}
               </button>
