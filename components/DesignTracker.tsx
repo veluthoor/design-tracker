@@ -56,9 +56,10 @@ export default function DesignTracker() {
     try {
       const res = await fetch("/api/tasks");
       const data = await res.json();
-      setTasks(data);
+      setTasks(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error(e);
+      setTasks([]);
     } finally {
       setLoading(false);
     }
