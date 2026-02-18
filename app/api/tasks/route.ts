@@ -24,7 +24,6 @@ export async function POST(request: Request) {
     const now = new Date().toISOString();
     const task = {
       ...body,
-      tags: body.tags || "Tintin", // Ensure tags always has a default value
       createdAt: now,
       updatedAt: now,
     };

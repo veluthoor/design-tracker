@@ -159,7 +159,7 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
     attachFile: "",
     productDoc: "",
     receivedBy: "",
-    tags: "Tintin",
+    tags: undefined,
   });
   const [members, setMembers] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -262,10 +262,11 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
               <label className="block text-xs font-medium text-pink-400 mb-1">Tags</label>
               <select
                 className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white"
-                value={form.tags || "Tintin"}
+                value={form.tags || ""}
                 onChange={e => setForm(f => ({ ...f, tags: e.target.value as TaskTag }))}
               >
-                {TAGS.map(t => <option key={t}>{t}</option>)}
+                <option value="">Select a tag...</option>
+                {TAGS.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
           </div>

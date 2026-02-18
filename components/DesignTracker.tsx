@@ -317,7 +317,7 @@ export default function DesignTracker() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <Badge label={task.tags || "Tintin"} styleMap={TAG_STYLES} />
+                      {task.tags && <Badge label={task.tags} styleMap={TAG_STYLES} />}
                     </td>
                     <td className="px-4 py-3">
                       {task.status && <Badge label={task.status} styleMap={STATUS_STYLES} />}
