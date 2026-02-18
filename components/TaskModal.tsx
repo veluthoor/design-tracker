@@ -154,7 +154,7 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
     description: "",
     status: "Not started",
     assignee: "",
-    taskType: "⭐️ Feature",
+    taskType: undefined,
     delivery: "",
     attachFile: "",
     productDoc: "",
@@ -277,10 +277,11 @@ export default function TaskModal({ task, onClose, onSave, onDelete }: TaskModal
               <label className="block text-xs font-medium text-pink-400 mb-1">Task Type</label>
               <select
                 className="w-full border border-pink-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white"
-                value={form.taskType || "⭐️ Feature"}
+                value={form.taskType || ""}
                 onChange={e => setForm(f => ({ ...f, taskType: e.target.value as TaskType }))}
               >
-                {TASK_TYPES.map(t => <option key={t}>{t}</option>)}
+                <option value="">Select a type...</option>
+                {TASK_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
             <div>
