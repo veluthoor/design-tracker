@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Task } from "@/types/task";
 import TaskModal from "./TaskModal";
 
@@ -40,6 +41,8 @@ function formatDate(d: string) {
 }
 
 export default function DesignTracker() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -66,6 +69,18 @@ export default function DesignTracker() {
   }, []);
 
   useEffect(() => { fetchTasks(); }, [fetchTasks]);
+
+  // Handle URL parameters to open specific task
+  useEffect(() => {
+    const taskId = searchParams.get('task');
+    if (taskId && tasks.length > 0) {
+      const task = tasks.find(t => String(t._id) === taskId);
+      if (task) {
+        setModalTask(task);
+        setShowModal(true);
+      }
+    }
+  }, [searchParams, tasks]);
 
   const handleSort = (field: keyof Task) => {
     if (sortField === field) setSortDir(d => d === "asc" ? "desc" : "asc");
@@ -94,8 +109,16 @@ export default function DesignTracker() {
     });
 
   const openNew = () => { setModalTask({}); setShowModal(true); };
-  const openEdit = (t: Task) => { setModalTask(t); setShowModal(true); };
-  const closeModal = () => { setShowModal(false); setModalTask(null); };
+  const openEdit = (t: Task) => {
+    setModalTask(t);
+    setShowModal(true);
+    router.push(`?task=${t._id}`, { scroll: false });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setModalTask(null);
+    router.push('/', { scroll: false });
+  };
 
   const handleSave = async (task: Partial<Task>) => {
     if (task._id) {
@@ -124,6 +147,15 @@ export default function DesignTracker() {
       {sortField === field ? (sortDir === "asc" ? "↑" : "↓") : "↕"}
     </span>
   );
+
+  const copyTaskLink = (taskId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const url = `${window.location.origin}?task=${taskId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      // You could add a toast notification here
+      console.log('Link copied to clipboard!');
+    });
+  };
 
   const statuses = ["All", "Not started", "In progress", "In review", "Handed-over"];
   const tags = ["All", "Tintin", "Nexus", "Halo"];
@@ -262,7 +294,20 @@ export default function DesignTracker() {
                     onClick={() => openEdit(task)}
                     className="border-b border-pink-50 hover:bg-pink-50/70 cursor-pointer transition-colors group"
                   >
-                    <td className="px-4 py-3 text-rose-300 text-xs">{i + 1}</td>
+                    <td className="px-4 py-3 text-rose-300 text-xs">
+                      <div className="flex items-center gap-1">
+                        <span>{i + 1}</span>
+                        <button
+                          onClick={(e) => copyTaskLink(String(task._id), e)}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity text-pink-500 hover:text-pink-700"
+                          title="Copy link to this design"
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
                     <td className="px-4 py-3">
                       <div className="font-medium text-rose-800 group-hover:text-rose-600 transition-colors">
                         {task.taskName}
@@ -272,7 +317,7 @@ export default function DesignTracker() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {task.tags && <Badge label={task.tags} styleMap={TAG_STYLES} />}
+                      <Badge label={task.tags || "Tintin"} styleMap={TAG_STYLES} />
                     </td>
                     <td className="px-4 py-3">
                       {task.status && <Badge label={task.status} styleMap={STATUS_STYLES} />}

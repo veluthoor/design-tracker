@@ -25,6 +25,10 @@ export async function PUT(request: Request, context: RouteContext) {
     const db = await getDb();
     const { _id, ...updateData } = body;
     updateData.updatedAt = new Date().toISOString();
+    // Ensure tags always has a value
+    if (!updateData.tags) {
+      updateData.tags = "Tintin";
+    }
 
     const result = await db.collection("tasks").findOneAndUpdate(
       { _id: new ObjectId(id) },
